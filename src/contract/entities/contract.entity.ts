@@ -1,4 +1,6 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Company } from 'src/company/entities/company.entity';
+// eslint-disable-next-line prettier/prettier
+import { Entity, Column, PrimaryGeneratedColumn, JoinColumn, OneToOne } from 'typeorm';
 
 @Entity()
 export class Contract {
@@ -13,4 +15,8 @@ export class Contract {
 
   @Column()
   option3: boolean;
+
+  @OneToOne(() => Company)
+  @JoinColumn()
+  company: Company;
 }
