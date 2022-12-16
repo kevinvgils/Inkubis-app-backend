@@ -7,7 +7,7 @@ export class Company {
   id: number;
 
   @Column()
-  name: boolean;
+  name: string;
 
   @OneToMany(() => Contract, (contract) => contract.company)
   contracts: Contract[];
