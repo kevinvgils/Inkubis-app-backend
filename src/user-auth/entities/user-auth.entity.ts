@@ -1,7 +1,7 @@
 import { Entity, Column, PrimaryGeneratedColumn, Unique } from 'typeorm';
 
 @Entity()
-export class User {
+export class UserAuth {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -9,8 +9,5 @@ export class User {
   emailAddress: string;
 
   @Column()
-  firstName: string;
-
-  @Column()
-  lastName: string;
+  password: string;
 }
