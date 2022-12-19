@@ -11,8 +11,10 @@ export class CompanyService {
 
   constructor(@InjectRepository(Company) private companyRepository: Repository<Company>) { }
 
-  create(createCompanyDto: CreateCompanyDto) {
-    return 'This action adds a new company';
+  async create(companyName: string) {
+    return await this.companyRepository.insert({
+      name: companyName,
+      });
   }
 
 
@@ -35,11 +37,14 @@ export class CompanyService {
   
   }
 
-  update(id: number, updateCompanyDto: UpdateCompanyDto) {
-    return `This action updates a #${id} company`;
+  async update(companyId: number, updateCompanyDto: UpdateCompanyDto) {
+    return await this.companyRepository.update(
+      companyId,
+      updateCompanyDto
+    )
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} company`;
+  async remove(id: number) {
+    return await this.companyRepository.delete(id)
   }
 }

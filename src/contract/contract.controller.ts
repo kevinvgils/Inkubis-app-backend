@@ -20,7 +20,7 @@ export class ContractController {
   @Post()
   create(@Body() createContractDto: CreateContractDto): Promise<any> {
 
-    return this.contractService.create(createContractDto.option1, createContractDto.option2, createContractDto.option3, createContractDto.companyId);
+    return this.contractService.create(createContractDto);
   }
 
   @Get()
@@ -36,6 +36,7 @@ export class ContractController {
   @Patch(':id')
   // eslint-disable-next-line prettier/prettier
   update(@Param('id') id: string, @Body() updateContractDto: UpdateContractDto) {
+    
     return this.contractService.update(+id, updateContractDto);
   }
 

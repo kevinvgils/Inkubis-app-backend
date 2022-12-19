@@ -11,32 +11,37 @@ export class ContractService {
   constructor(@InjectRepository(Contract) private contractRepository: Repository<Contract>) { }
 
 
-  async create(option1: boolean, option2: boolean, option3: boolean, companyId: Company) {
+  async create(createCompanyDto: CreateContractDto) {
     //return 'This action adds a new contract';
-    return await this.contractRepository.insert({
-    option1: option1,
-    option2: option2,
-    option3: option3,
-    company: companyId
+    return await this.contractRepository.insert(createCompanyDto);
+  }
+
+  
+  
+
+  async findAll() {
+    return await this.contractRepository.find();
+  }
+
+  async findOne(id: number) {
+    return await this.contractRepository.findOne({
+      where: { id: id },
+      relations: {
+        company: true
+      },
     });
-  }
-
   
-  
-
-  findAll() {
-    return `This action returns all contract`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} contract`;
+  async update(id: number, updateContractDto: UpdateContractDto) {
+    //const updateContractDto = new UpdateContractDto
+    return await this.contractRepository.update(
+      id,
+      updateContractDto
+      );
   }
 
-  update(id: number, updateContractDto: UpdateContractDto) {
-    return `This action updates a #${id} contract`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} contract`;
+  async remove(id: number) {
+    return await this.contractRepository.delete(id);
   }
 }

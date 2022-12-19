@@ -2,6 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { CompanyService } from './company.service';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { UpdateCompanyDto } from './dto/update-company.dto';
+import { Company } from './entities/company.entity';
 
 @Controller('company')
 export class CompanyController {
@@ -9,7 +10,12 @@ export class CompanyController {
 
   @Post()
   create(@Body() createCompanyDto: CreateCompanyDto) {
-    return this.companyService.create(createCompanyDto);
+    //const company = new Company();
+    //company.id = 
+
+    return this.companyService.create(createCompanyDto.name);
+    
+    //return this.companyService.create(createCompanyDto);
   }
 
   @Get()
@@ -24,6 +30,7 @@ export class CompanyController {
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateCompanyDto: UpdateCompanyDto) {
+    //return this.companyService.update(+id, updateCompanyDto);
     return this.companyService.update(+id, updateCompanyDto);
   }
 
