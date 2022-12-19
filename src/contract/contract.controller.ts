@@ -7,17 +7,20 @@ import {
   Param,
   Delete,
 } from '@nestjs/common';
+import { Company } from 'src/company/entities/company.entity';
 import { ContractService } from './contract.service';
 import { CreateContractDto } from './dto/create-contract.dto';
 import { UpdateContractDto } from './dto/update-contract.dto';
+import { Contract } from './entities/contract.entity';
 
 @Controller('contract')
 export class ContractController {
   constructor(private readonly contractService: ContractService) {}
 
   @Post()
-  create(@Body() createContractDto: CreateContractDto) {
-    return this.contractService.create(createContractDto);
+  create(@Body() createContractDto: CreateContractDto): Promise<any> {
+
+    return this.contractService.create(createContractDto.option1, createContractDto.option2, createContractDto.option3, createContractDto.companyId);
   }
 
   @Get()
