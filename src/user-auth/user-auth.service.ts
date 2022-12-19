@@ -8,7 +8,7 @@ import { UpdateUserAuthDto } from './dto/update-user-auth.dto';
 import { UserAuth } from './entities/user-auth.entity';
 import { compare, hash } from 'bcrypt';
 import { JwtPayload, verify, sign, Secret } from 'jsonwebtoken';
-import { User } from 'src/user/entities/user.entity';
+import { User, UserRole } from 'src/user/entities/user.entity';
 
 @Injectable()
 export class UserAuthService {
@@ -25,8 +25,10 @@ export class UserAuthService {
       return 'No emailaddress, password or role';
     }
 
-    if(createUserAuthDto.role !== ('admin' || 'sales')) {
-      return 'Role must be admin or sales'
+    if(createUserAuthDto.role !== UserRole.ADMIN) {
+      if(createUserAuthDto.role !== UserRole.SALES) {
+        return 'Role must be admin or sales'
+      }
     }
 
     const hashedPw = await hash(createUserAuthDto.password, 10);
