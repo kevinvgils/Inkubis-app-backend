@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
 // eslint-disable-next-line prettier/prettier
 import { InjectDataSource, InjectEntityManager, InjectRepository } from '@nestjs/typeorm';
@@ -6,6 +7,7 @@ import { CreateUserAuthDto } from './dto/create-user-auth.dto';
 import { UpdateUserAuthDto } from './dto/update-user-auth.dto';
 import { UserAuth } from './entities/user-auth.entity';
 import { compare, hash } from 'bcrypt';
+import { JwtPayload, verify, sign, Secret } from 'jsonwebtoken';
 import { User } from 'src/user/entities/user.entity';
 
 @Injectable()
@@ -19,9 +21,14 @@ export class UserAuthService {
   ) {}
 
   async register(createUserAuthDto: CreateUserAuthDto) {
-    if (!createUserAuthDto.emailAddress || !createUserAuthDto.password) {
-      return 'No emailaddress or password';
+    if (!createUserAuthDto.emailAddress || !createUserAuthDto.password || !createUserAuthDto.role) {
+      return 'No emailaddress, password or role';
     }
+
+    if(createUserAuthDto.role !== ('admin' || 'sales')) {
+      return 'Role must be admin or sales'
+    }
+
     const hashedPw = await hash(createUserAuthDto.password, 10);
     await this.authRepository.insert({
       emailAddress: createUserAuthDto.emailAddress,
@@ -31,23 +38,45 @@ export class UserAuthService {
       emailAddress: createUserAuthDto.emailAddress,
       firstName: createUserAuthDto.firstName,
       lastName: createUserAuthDto.lastName,
+      role: createUserAuthDto.role,
     });
-    return 'This action adds a new userAuth';
+    return 'New user added';
   }
 
-  findAll() {
-    return `This action returns all userAuth`;
+  async generateToken(email: string, password: string): Promise<string> {
+    console.log(process.env.JWT_SECRET);
+    const identity = await this.authRepository.findOne({
+      where: {
+        emailAddress: email,
+      },
+    });
+
+    if (!identity || !(await compare(password, identity.password)))
+      throw new Error('user not authorized');
+
+    const user = await this.userRepository.findOne({
+      where: {
+        emailAddress: email,
+      },
+    });
+
+    return new Promise((resolve, reject) => {
+        try {
+            const token = sign({email, id: user?.id}, 'secretstring');
+            resolve(token)
+        } catch (e) {
+            reject(e)
+        }
+    })
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} userAuth`;
-  }
-
-  update(id: number, updateUserAuthDto: UpdateUserAuthDto) {
-    return `This action updates a #${id} userAuth`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} userAuth`;
+  async verifyToken(token: string): Promise<string | JwtPayload> {
+    token = token.replace('Bearer ',''); 
+    return new Promise((resolve, reject) => {
+        verify(token, 'secretstring', (err, payload) => {
+            if (err) reject(err);
+            else resolve(payload!);
+        })
+    })
   }
 }

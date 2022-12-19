@@ -1,8 +1,10 @@
+/* eslint-disable prettier/prettier */
 // eslint-disable-next-line prettier/prettier
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpException, HttpStatus } from '@nestjs/common';
 import { UserAuthService } from './user-auth.service';
 import { CreateUserAuthDto } from './dto/create-user-auth.dto';
 import { UpdateUserAuthDto } from './dto/update-user-auth.dto';
+import { UserAuth } from './entities/user-auth.entity';
 
 @Controller('user-auth')
 export class UserAuthController {
@@ -13,24 +15,18 @@ export class UserAuthController {
     return this.userAuthService.register(createUserAuthDto);
   }
 
-  @Get()
-  findAll() {
-    return this.userAuthService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.userAuthService.findOne(+id);
-  }
-
-  @Patch(':id')
-  // eslint-disable-next-line prettier/prettier
-  update(@Param('id') id: string, @Body() updateUserAuthDto: UpdateUserAuthDto) {
-    return this.userAuthService.update(+id, updateUserAuthDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.userAuthService.remove(+id);
+  @Post('login')
+  async login(@Body() credentials: UserAuth): Promise<any> {
+      try {
+        const tokenToVerify = await this.userAuthService.generateToken(credentials.emailAddress, credentials.password)
+        const user = await this.userAuthService.verifyToken(tokenToVerify);
+          return {
+              id: user.id,
+              emailAddress: user.email,
+              token: tokenToVerify
+          };
+      } catch (e) {
+          throw new HttpException('Invalid credentials', HttpStatus.UNAUTHORIZED);
+      }
   }
 }
