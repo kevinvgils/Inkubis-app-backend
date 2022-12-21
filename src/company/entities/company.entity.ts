@@ -1,5 +1,7 @@
 import { Contract } from 'src/contract/entities/contract.entity';
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { User } from 'src/user/entities/user.entity';
+// eslint-disable-next-line prettier/prettier
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToMany } from 'typeorm';
 
 @Entity()
 export class Company {
@@ -11,4 +13,7 @@ export class Company {
 
   @OneToMany(() => Contract, (contract) => contract.company)
   contracts: Contract[];
+
+  @ManyToMany(() => User, (users: User) => users.companies)
+  users: User[];
 }

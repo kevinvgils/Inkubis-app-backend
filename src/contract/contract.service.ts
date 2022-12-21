@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
 import { CreateContractDto } from './dto/create-contract.dto';
 import { UpdateContractDto } from './dto/update-contract.dto';
@@ -15,9 +16,6 @@ export class ContractService {
     //return 'This action adds a new contract';
     return await this.contractRepository.insert(createCompanyDto);
   }
-
-  
-  
 
   async findAll() {
     return await this.contractRepository.find();

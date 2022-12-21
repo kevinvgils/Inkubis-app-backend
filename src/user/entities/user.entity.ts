@@ -1,4 +1,6 @@
-import { Entity, Column, PrimaryGeneratedColumn, Unique } from 'typeorm';
+import { Company } from 'src/company/entities/company.entity';
+// eslint-disable-next-line prettier/prettier
+import { Entity, Column, PrimaryGeneratedColumn, Unique, ManyToMany, JoinTable } from 'typeorm';
 
 export enum UserRole {
   ADMIN = 'admin',
@@ -25,4 +27,8 @@ export class User {
     default: UserRole.SALES,
   })
   role: UserRole;
+
+  @ManyToMany(() => Company, (company) => company.users)
+  @JoinTable()
+  companies: Company[];
 }
