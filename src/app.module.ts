@@ -1,15 +1,15 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { User } from './user/entities/user.entity';
-import { UserModule } from './user/user.module';
-import { CompanyModule } from './company/company.module';
-import { ContractModule } from './contract/contract.module';
 import { Contract } from './contract/entities/contract.entity';
 import { Company } from './company/entities/company.entity';
 import { UserAuthModule } from './user-auth/user-auth.module';
 import { UserAuth } from './user-auth/entities/user-auth.entity';
+import { TokenMiddleware } from './user-auth/token.middleware';
+import { DataModule } from './data.module';
+import { RouterModule } from '@nestjs/core';
 
 @Module({
   imports: [
@@ -34,12 +34,27 @@ import { UserAuth } from './user-auth/entities/user-auth.entity';
       name: 'authConnection',
       synchronize: true,
     }),
-    UserModule,
-    CompanyModule,
-    ContractModule,
+    DataModule,
     UserAuthModule,
+    RouterModule.register([
+      {
+        path: 'auth-api',
+        module: UserAuthModule,
+      },
+      {
+        path: 'data-api',
+        module: DataModule,
+      },
+    ]),
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(TokenMiddleware)
+      .exclude({ path: 'user-auth/login', method: RequestMethod.ALL })
+      .forRoutes('*');
+  }
+}
