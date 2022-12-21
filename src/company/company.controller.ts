@@ -1,5 +1,6 @@
 // eslint-disable-next-line prettier/prettier
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { InjectToken, Token } from 'src/user-auth/token.decorator';
 import { CompanyService } from './company.service';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { UpdateCompanyDto } from './dto/update-company.dto';
@@ -12,10 +13,10 @@ export class CompanyController {
   @Post()
   create(@Body() createCompanyDto: CreateCompanyDto) {
     //const company = new Company();
-    //company.id = 
+    //company.id =
 
     return this.companyService.create(createCompanyDto.name);
-    
+
     //return this.companyService.create(createCompanyDto);
   }
 

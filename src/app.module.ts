@@ -54,7 +54,7 @@ export class AppModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(TokenMiddleware)
-      .exclude({ path: 'user-auth/login', method: RequestMethod.ALL })
+      .exclude({ path: 'auth-api/user-auth/login', method: RequestMethod.ALL })
       .forRoutes('*');
   }
 }
