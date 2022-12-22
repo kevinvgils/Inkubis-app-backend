@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CompanyController } from './company/company.controller';
@@ -13,18 +12,8 @@ import { UserController } from './user/user.controller';
 import { UserService } from './user/user.service';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([User, Company, Contract]),
-  ],
-  controllers: [
-    UserController,
-    ContractController,
-    CompanyController
-  ],
-  providers: [
-    UserService,
-    CompanyService,
-    ContractService
-  ],
+  imports: [TypeOrmModule.forFeature([User, Company, Contract])],
+  controllers: [UserController, ContractController, CompanyController],
+  providers: [UserService, CompanyService, ContractService],
 })
 export class DataModule {}

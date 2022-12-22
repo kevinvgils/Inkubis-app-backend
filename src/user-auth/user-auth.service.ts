@@ -1,7 +1,9 @@
-/* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
-// eslint-disable-next-line prettier/prettier
-import { InjectDataSource, InjectEntityManager, InjectRepository } from '@nestjs/typeorm';
+import {
+  InjectDataSource,
+  InjectEntityManager,
+  InjectRepository,
+} from '@nestjs/typeorm';
 import { DataSource, EntityManager, Repository } from 'typeorm';
 import { CreateUserAuthDto } from './dto/create-user-auth.dto';
 import { UpdateUserAuthDto } from './dto/update-user-auth.dto';
@@ -12,7 +14,6 @@ import { User, UserRole } from 'src/user/entities/user.entity';
 
 @Injectable()
 export class UserAuthService {
-  // eslint-disable-next-line prettier/prettier
   constructor(
     @InjectRepository(UserAuth, 'authConnection')
     private authRepository: Repository<UserAuth>,
@@ -21,13 +22,17 @@ export class UserAuthService {
   ) {}
 
   async register(createUserAuthDto: CreateUserAuthDto) {
-    if (!createUserAuthDto.emailAddress || !createUserAuthDto.password || !createUserAuthDto.role) {
+    if (
+      !createUserAuthDto.emailAddress ||
+      !createUserAuthDto.password ||
+      !createUserAuthDto.role
+    ) {
       return 'No emailaddress, password or role';
     }
 
-    if(createUserAuthDto.role !== UserRole.ADMIN) {
-      if(createUserAuthDto.role !== UserRole.SALES) {
-        return 'Role must be admin or sales'
+    if (createUserAuthDto.role !== UserRole.ADMIN) {
+      if (createUserAuthDto.role !== UserRole.SALES) {
+        return 'Role must be admin or sales';
       }
     }
 
@@ -63,22 +68,22 @@ export class UserAuthService {
     });
 
     return new Promise((resolve, reject) => {
-        try {
-            const token = sign({email, id: user?.id}, 'secretstring');
-            resolve(token)
-        } catch (e) {
-            reject(e)
-        }
-    })
+      try {
+        const token = sign({ email, id: user?.id }, 'secretstring');
+        resolve(token);
+      } catch (e) {
+        reject(e);
+      }
+    });
   }
 
   async verifyToken(token: string): Promise<string | JwtPayload> {
-    token = token.replace('Bearer ',''); 
+    token = token.replace('Bearer ', '');
     return new Promise((resolve, reject) => {
-        verify(token, 'secretstring', (err, payload) => {
-            if (err) reject(err);
-            else resolve(payload!);
-        })
-    })
+      verify(token, 'secretstring', (err, payload) => {
+        if (err) reject(err);
+        else resolve(payload!);
+      });
+    });
   }
 }
