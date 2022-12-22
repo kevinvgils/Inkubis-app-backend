@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
 import { HttpStatus } from '@nestjs/common/enums';
 import { HttpException } from '@nestjs/common/exceptions';
@@ -38,7 +37,10 @@ export class UserService {
 
   async addCompanyToUser(userId: number, companies: number[]) {
     if (!userId || !companies) {
-      throw new HttpException('Specify the userId or the companyIds', HttpStatus.BAD_REQUEST);
+      throw new HttpException(
+        'Specify the userId or the companyIds',
+        HttpStatus.BAD_REQUEST,
+      );
     }
 
     const companiesToAdd = await this.companyRepository.find({

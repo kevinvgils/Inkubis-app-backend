@@ -1,6 +1,12 @@
 import { Company } from 'src/company/entities/company.entity';
-// eslint-disable-next-line prettier/prettier
-import { Entity, Column, PrimaryGeneratedColumn, JoinColumn, OneToOne, ManyToOne } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  JoinColumn,
+  OneToOne,
+  ManyToOne,
+} from 'typeorm';
 
 @Entity()
 export class Contract {

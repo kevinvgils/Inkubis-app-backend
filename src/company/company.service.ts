@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Contract } from 'src/contract/entities/contract.entity';
@@ -9,16 +8,15 @@ import { Company } from './entities/company.entity';
 
 @Injectable()
 export class CompanyService {
-
-  constructor(@InjectRepository(Company) private companyRepository: Repository<Company>) { }
+  constructor(
+    @InjectRepository(Company) private companyRepository: Repository<Company>,
+  ) {}
 
   async create(companyName: string) {
     return await this.companyRepository.insert({
       name: companyName,
-      });
+    });
   }
-
-
 
   async findAll() {
     return await this.companyRepository.find();
@@ -32,20 +30,16 @@ export class CompanyService {
     return await this.companyRepository.findOne({
       where: { id: id },
       relations: {
-        contracts: true
+        contracts: true,
       },
     });
-  
   }
 
   async update(companyId: number, updateCompanyDto: UpdateCompanyDto) {
-    return await this.companyRepository.update(
-      companyId,
-      updateCompanyDto
-    )
+    return await this.companyRepository.update(companyId, updateCompanyDto);
   }
 
   async remove(id: number) {
-    return await this.companyRepository.delete(id)
+    return await this.companyRepository.delete(id);
   }
 }

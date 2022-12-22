@@ -1,6 +1,12 @@
 import { Company } from 'src/company/entities/company.entity';
-// eslint-disable-next-line prettier/prettier
-import { Entity, Column, PrimaryGeneratedColumn, Unique, ManyToMany, JoinTable } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  Unique,
+  ManyToMany,
+  JoinTable,
+} from 'typeorm';
 
 export enum UserRole {
   ADMIN = 'admin',

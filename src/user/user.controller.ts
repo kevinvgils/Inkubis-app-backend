@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import {
   Controller,
   Get,
@@ -40,7 +39,10 @@ export class UserController {
 
   @Put('companies')
   addCompanyToUser(@Body() companiesToAdd: AddCompanyUserDto) {
-    return this.userService.addCompanyToUser(companiesToAdd.userId, companiesToAdd.companyIds);
+    return this.userService.addCompanyToUser(
+      companiesToAdd.userId,
+      companiesToAdd.companyIds,
+    );
   }
 
   @Delete(':id')

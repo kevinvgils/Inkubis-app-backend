@@ -1,6 +1,5 @@
 import { Contract } from 'src/contract/entities/contract.entity';
 import { User } from 'src/user/entities/user.entity';
-// eslint-disable-next-line prettier/prettier
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToMany } from 'typeorm';
 
 @Entity()
