@@ -24,7 +24,7 @@ export class UserAuthService {
   ) {}
 
   async register(createUserAuthDto: CreateUserAuthDto, token: string) {
-    this.checkIsAdmin(token['role'])
+    await this.checkIsAdmin(token['role'])
 
     if (
       !createUserAuthDto.emailAddress ||
@@ -91,9 +91,11 @@ export class UserAuthService {
     });
   }
 
-  async checkIsAdmin(userRole: string): Promise<void> {
-    if(userRole === 'sales') {
-      throw new HttpException(`You don't have the rights to perform this call role 'admin' is needed`, HttpStatus.UNAUTHORIZED)
+  async checkIsAdmin(userRole: string): Promise<boolean> {
+    if(userRole !== 'admin') {
+      throw new HttpException(`You must have the role 'admin' to perform this action`, HttpStatus.UNAUTHORIZED)
+    } else {
+      return true;
     }
   }
 }
