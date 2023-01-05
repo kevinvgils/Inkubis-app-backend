@@ -11,6 +11,8 @@ import { UserAuth } from './entities/user-auth.entity';
 import { compare, hash } from 'bcrypt';
 import { JwtPayload, verify, sign, Secret } from 'jsonwebtoken';
 import { User, UserRole } from 'src/user/entities/user.entity';
+import { HttpException } from '@nestjs/common/exceptions';
+import { HttpStatus } from '@nestjs/common/enums';
 
 @Injectable()
 export class UserAuthService {
@@ -21,7 +23,9 @@ export class UserAuthService {
     private userRepository: Repository<User>,
   ) {}
 
-  async register(createUserAuthDto: CreateUserAuthDto) {
+  async register(createUserAuthDto: CreateUserAuthDto, token: string) {
+    await this.checkIsAdmin(token['role'])
+
     if (
       !createUserAuthDto.emailAddress ||
       !createUserAuthDto.password ||
@@ -69,7 +73,7 @@ export class UserAuthService {
 
     return new Promise((resolve, reject) => {
       try {
-        const token = sign({ email, id: user?.id }, 'secretstring');
+        const token = sign({ email, id: user?.id, role: user?.role }, 'secretstring');
         resolve(token);
       } catch (e) {
         reject(e);
@@ -85,5 +89,13 @@ export class UserAuthService {
         else resolve(payload!);
       });
     });
+  }
+
+  async checkIsAdmin(userRole: string): Promise<boolean> {
+    if(userRole !== 'admin') {
+      throw new HttpException(`You must have the role 'admin' to perform this action`, HttpStatus.UNAUTHORIZED)
+    } else {
+      return true;
+    }
   }
 }

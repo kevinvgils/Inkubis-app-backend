@@ -13,14 +13,20 @@ import { UserAuthService } from './user-auth.service';
 import { CreateUserAuthDto } from './dto/create-user-auth.dto';
 import { UpdateUserAuthDto } from './dto/update-user-auth.dto';
 import { UserAuth } from './entities/user-auth.entity';
+import { InjectToken } from './token.decorator';
 
 @Controller('user-auth')
 export class UserAuthController {
   constructor(private readonly userAuthService: UserAuthService) {}
 
   @Post()
-  create(@Body() createUserAuthDto: CreateUserAuthDto) {
-    return this.userAuthService.register(createUserAuthDto);
+  create(@InjectToken() token, @Body() createUserAuthDto: CreateUserAuthDto) {
+    try {
+      return this.userAuthService.register(createUserAuthDto, token);
+    } catch (e) {
+      console.log('ERROR')
+      throw new e;
+    }
   }
 
   @Post('login')
