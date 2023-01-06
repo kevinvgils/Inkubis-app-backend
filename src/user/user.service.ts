@@ -19,16 +19,48 @@ export class UserService {
     return 'This action adds a new user';
   }
 
-  findAll() {
-    return `This action returns all user`;
+  async findAll() {
+    return await this.userRepository.find({
+      relations: {
+        companies: true
+      }
+    });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findOne(id: number) {
+    console.log(id)
+    return await this.userRepository.findOne({
+      relations: {
+        companies: true
+      },
+      where: {
+        id: id
+      }
+    });
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async update(id: number, updateUserDto: UpdateUserDto) {
+    if (!id || !UpdateUserDto) {
+      throw new HttpException(
+        'Check if the request body is correct',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    const companiesToAdd = await this.companyRepository.find({
+      where: {
+        id: In(updateUserDto.companies),
+      },
+    });
+
+    const user = await this.userRepository.findOne({ where: { id: id } });
+
+    user.firstName = updateUserDto.firstName;
+    user.lastName = updateUserDto.lastName;
+    user.emailAddress = updateUserDto.emailAddress;
+    user.role = updateUserDto.role;
+    user.companies = companiesToAdd;
+    return await this.userRepository.save(user);
   }
 
   remove(id: number) {
