@@ -8,6 +8,7 @@ import {
   Delete,
 } from '@nestjs/common';
 import { Company } from 'src/company/entities/company.entity';
+import { InjectToken } from 'src/user-auth/token.decorator';
 import { ContractService } from './contract.service';
 import { CreateContractDto } from './dto/create-contract.dto';
 import { UpdateContractDto } from './dto/update-contract.dto';
@@ -18,7 +19,10 @@ export class ContractController {
   constructor(private readonly contractService: ContractService) {}
 
   @Post()
-  create(@Body() createContractDto: CreateContractDto): Promise<any> {
+  create(@InjectToken() token, @Body() createContractDto: CreateContractDto): Promise<any> {
+    //console.log(token.id);
+    console.log(createContractDto);
+    
     return this.contractService.create(createContractDto);
   }
 

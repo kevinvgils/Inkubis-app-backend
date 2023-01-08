@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateContractDto } from './dto/create-contract.dto';
 import { UpdateContractDto } from './dto/update-contract.dto';
 import { Repository } from 'typeorm';
-import { Contract } from './entities/contract.entity';
+import { companyExecutingDataProcessing, companyResponsibleForDataProcessing, Contract, contractsignees, thirdparty } from './entities/contract.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Company } from 'src/company/entities/company.entity';
 
@@ -11,11 +11,24 @@ export class ContractService {
   constructor(
     @InjectRepository(Contract)
     private contractRepository: Repository<Contract>,
+    @InjectRepository(companyResponsibleForDataProcessing)
+    private companyResponsibleForDataProcessing: Repository<companyResponsibleForDataProcessing>,
+    @InjectRepository(companyExecutingDataProcessing)
+    private companyExecutingDataProcessing: Repository<companyExecutingDataProcessing>,
+    @InjectRepository(contractsignees)
+    private contractSignees: Repository<contractsignees>,
+    @InjectRepository(thirdparty)
+    private thirdParty: Repository<thirdparty>
   ) {}
 
-  async create(createCompanyDto: CreateContractDto) {
+  async create(createContractDto: CreateContractDto) {
     //return 'This action adds a new contract';
-    return await this.contractRepository.insert(createCompanyDto);
+    
+    await this.companyResponsibleForDataProcessing.insert(createContractDto.contractinfo.companyResponsibleForDataProcessing);
+    
+    //await this.contractSignees.insert(createContractDto.contractsignees);
+    //await this.thirdParty.insert(createContractDto.thirdparty);
+    return await this.companyExecutingDataProcessing.insert(createContractDto.contractinfo.companyExecutingDataProcessing);
   }
 
   async findAll() {
