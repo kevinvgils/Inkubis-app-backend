@@ -24,7 +24,7 @@ export class TokenMiddleware implements NestMiddleware {
 
     try {
       const token = await this.userAuthService.verifyToken(authHeader);
-      console.log(token);
+      //console.log(token);
       res.locals['token'] = token;
     } catch (e) {
       throw new HttpException('Token invalid', HttpStatus.UNAUTHORIZED);
