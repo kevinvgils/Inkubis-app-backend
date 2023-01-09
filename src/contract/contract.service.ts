@@ -57,7 +57,12 @@ export class ContractService {
       usersCompanies.push(c.id)
     });
     return await this.contractRepository.find({
-      where: { company: In(usersCompanies)}
+      where: { company: In(usersCompanies)},
+      relations: {
+        company: true,
+        companyExecutingDP: true,
+        companyResponsibleForDP: true
+      }
     });
   }
 
