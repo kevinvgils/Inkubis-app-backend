@@ -58,7 +58,7 @@ export class CreateContractDto {
           CompanyResponsibleForDataProcessing: { name: string; jobDescription: string; email: string; phone: string; mobile: string; },
           CompanyExecutingDataProcessing: { name: string; jobDescription: string; email: string; phone: string; mobile: string; }
         };
-        company: Company;
+        company: number;
 
       }
 

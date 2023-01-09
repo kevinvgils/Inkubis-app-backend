@@ -31,6 +31,11 @@ export class ContractController {
     return this.contractService.findAll();
   }
 
+  @Get("user")
+  findAllForUser(@InjectToken() token: any) {
+    return this.contractService.findAllForUser(token.id);
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.contractService.findOne(+id);

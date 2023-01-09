@@ -10,24 +10,6 @@ import {
 } from 'typeorm';
 
 @Entity()
-export class Contract {
-  @PrimaryGeneratedColumn()
-  id: number;
-
-  @Column()
-  option1: boolean;
-
-  @Column()
-  option2: boolean;
-
-  @Column()
-  option3: boolean;
-
-  @ManyToOne(() => Company, (company) => company.contracts)
-  company: Company;
-}
-
-@Entity()
 export class companyResponsibleForDataProcessing {
   @PrimaryGeneratedColumn()
   id: number;
@@ -128,4 +110,25 @@ export class thirdparty {
   @Column()
   reasonForDataTransferOfDataTransfer: string
 
+}
+
+@Entity()
+export class Contract {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @OneToOne(() => companyResponsibleForDataProcessing, {
+    cascade: true
+  })
+  @JoinColumn()
+  companyResponsibleForDP: companyResponsibleForDataProcessing;
+
+  @OneToOne(() => companyExecutingDataProcessing, {
+    cascade: true
+  })
+  @JoinColumn()
+  companyExecutingDP: companyExecutingDataProcessing;
+
+  @ManyToOne(() => Company, (company) => company.contracts)
+  company: Company;
 }
