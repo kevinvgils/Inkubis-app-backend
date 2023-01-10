@@ -71,6 +71,8 @@ export class ContractService {
       where: { id: id },
       relations: {
         company: true,
+        companyExecutingDP: true,
+        companyResponsibleForDP: true
       },
     });
   }
