@@ -3,7 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { User } from './user/entities/user.entity';
-import { CompanyExecutingDataProcessing, CompanyResponsibleForDataProcessing, Contract, Contractsignees, Thirdparty, TpDataTransfer, TpProcessing, TpSupplier } from './contract/entities/contract.entity';
+import { Certification, CompanyExecutingDataProcessing, CompanyResponsibleForDataProcessing, Contract, Contractsignees, Spoc, Thirdparty, TpDataTransfer, TpProcessing, TpSupplier } from './contract/entities/contract.entity';
 import { Company } from './company/entities/company.entity';
 import { UserAuthModule } from './user-auth/user-auth.module';
 import { UserAuth } from './user-auth/entities/user-auth.entity';
@@ -20,7 +20,7 @@ import { RouterModule } from '@nestjs/core';
       username: 'root',
       password: '',
       database: 'inkubis',
-      entities: [User, Contract, CompanyResponsibleForDataProcessing, CompanyExecutingDataProcessing, Contractsignees, Thirdparty, Company, TpDataTransfer, TpProcessing, TpSupplier],
+      entities: [User, Contract, CompanyResponsibleForDataProcessing, CompanyExecutingDataProcessing, Contractsignees, Thirdparty, Company, TpDataTransfer, TpProcessing, TpSupplier, Certification, Spoc],
       synchronize: true,
     }),
     TypeOrmModule.forRoot({

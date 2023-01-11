@@ -147,6 +147,47 @@ export class Thirdparty {
 }
 
 @Entity()
+export class Certification {
+  @PrimaryGeneratedColumn()
+  id: number;
+  @Column()
+  certifications: string;
+  @Column()
+  achievedCertifications: string;
+  @Column()
+  overhauls: string;
+}
+
+@Entity()
+export class Spoc {
+  @PrimaryGeneratedColumn()
+  id: number;
+  //E = ExecutingDataProcessing
+  @Column()
+  nameE: string;
+  @Column()
+  jobDescE: string;
+  @Column()
+  emailE: string;
+  @Column()
+  phoneE: string;
+  @Column()
+  mobileE: string;
+
+  //R = ResponsibleDataProcessing
+  @Column()
+  nameR: string;
+  @Column()
+  jobDescR: string;
+  @Column()
+  emailR: string;
+  @Column()
+  phoneR: string;
+  @Column()
+  mobileR: string;
+}
+
+@Entity()
 export class Contract {
   @PrimaryGeneratedColumn()
   id: number;
@@ -178,6 +219,21 @@ export class Contract {
   })
   @JoinColumn()
   thirdParty: Thirdparty;
+
+  @OneToOne(() => Certification, {
+    cascade: true,
+    onDelete: 'CASCADE'
+  })
+  @JoinColumn()
+  certifications: Certification;
+
+  
+  @OneToOne(() => Spoc, {
+    cascade: true,
+    onDelete: 'CASCADE'
+  })
+  @JoinColumn()
+  spoc: Spoc;
 
   @Column()
   dateSigned: string;

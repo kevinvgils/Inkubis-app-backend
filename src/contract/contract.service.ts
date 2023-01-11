@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateContractDto } from './dto/create-contract.dto';
 import { UpdateContractDto } from './dto/update-contract.dto';
 import { In, Repository } from 'typeorm';
-import { CompanyExecutingDataProcessing, CompanyResponsibleForDataProcessing, Contract, Contractsignees, Thirdparty, TpDataTransfer, TpProcessing, TpSupplier } from './entities/contract.entity';
+import { Certification, CompanyExecutingDataProcessing, CompanyResponsibleForDataProcessing, Contract, Contractsignees, Spoc, Thirdparty, TpDataTransfer, TpProcessing, TpSupplier } from './entities/contract.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Company } from 'src/company/entities/company.entity';
 import { CompanyService } from 'src/company/company.service';
@@ -43,23 +43,33 @@ export class ContractService {
     thirdParty.TpDataTransfer = new TpDataTransfer();
     thirdParty.TpProcessing = new TpProcessing;
     thirdParty.TpSupplier = new TpSupplier();
-
     thirdParty.TpDataTransfer = {
       id: thirdParty.TpDataTransfer.id,
       ...createContractDto.thirdparty.dataTransfer
     }
-
     thirdParty.TpProcessing = {
       id: thirdParty.TpProcessing.id,
       ...createContractDto.thirdparty.externalSubEmployeeExecutingDataProcessing
     }
-
     thirdParty.TpSupplier = {
       id: thirdParty.TpSupplier.id,
       ...createContractDto.thirdparty.externalSubEmployeeExecutingDatathirdPartySuppliersProcessing
     }
 
-    // console.log(createContractDto)
+    let spoc = new Spoc();
+    spoc = {
+      id: spoc.id,
+      ...createContractDto.spoc.CompanyExecutingDataProcessing,
+      ...createContractDto.spoc.CompanyResponsibleForDataProcessing
+    }
+
+    let certifications = new Certification();
+    certifications = {
+      id: certifications.id,
+      ...createContractDto.certification
+    }
+
+    console.log(createContractDto)
 
     //GET COMPANY
     const company = await this.companyService.findOne(createContractDto.company)
@@ -68,9 +78,14 @@ export class ContractService {
     newContract.companyResponsibleForDP = companyResponsibleForDP;
     newContract.contractSignees = contractsignees;
     newContract.thirdParty = thirdParty;
+    newContract.certifications = certifications;
+    newContract.spoc = spoc;
     newContract.company = company;
+    newContract.citySigned = createContractDto.contractinfo.citySigned;
+    newContract.dateSigned = createContractDto.contractinfo.dateSigned;
+    newContract.processingPurposes = createContractDto.contractinfo.processingPurposes;
 
-    console.log(newContract)
+    // console.log(newContract)
     
     return 'Test'
     // return await this.contractRepository.save(newContract);
