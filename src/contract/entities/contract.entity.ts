@@ -1,4 +1,3 @@
-import { SrvRecord } from 'dns';
 import { Company } from 'src/company/entities/company.entity';
 import {
   Entity,
@@ -10,7 +9,7 @@ import {
 } from 'typeorm';
 
 @Entity()
-export class companyResponsibleForDataProcessing {
+export class CompanyResponsibleForDataProcessing {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -32,7 +31,7 @@ export class companyResponsibleForDataProcessing {
 }
 
 @Entity()
-export class companyExecutingDataProcessing {
+export class CompanyExecutingDataProcessing {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -53,62 +52,97 @@ export class companyExecutingDataProcessing {
 }
 
 @Entity()
-export class contractsignees {
+export class Contractsignees {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
-  nameEmployee1CompanyResponsibleForDataProcessing: string;
+  nameEmployee1ResponsibleForDP: string;
   @Column()
-  jobEmployee1CompanyResponsibleForDataProcessing: string;
+  jobEmployee1ResponsibleForDP: string;
   @Column()
-  nameEmployee2CompanyResponsibleForDataProcessing: string;
+  nameEmployee2ResponsibleForDP: string;
   @Column()
-  jobEmployee2CompanyResponsibleForDataProcessing: string;
-
-  nameEmployee1CompanyExecutingDataProcessing: string;
+  jobEmployee2ResponsibleForDP: string;
   @Column()
-  jobEmployee1CompanyExecutingDataProcessing: string;
+  nameEmployee1ExecutingDP: string;
   @Column()
-  nameEmployee2CompanyExecutingDataProcessing: string;
+  jobEmployee1ExecutingDP: string;
   @Column()
-  jobEmployee2CompanyExecutingDataProcessing: string;
+  nameEmployee2ExecutingDP: string;
+  @Column()
+  jobEmployee2ExecutingDP: string;
 }
 
 @Entity()
-export class thirdparty {
+export class TpProcessing {
+  @PrimaryGeneratedColumn()
+  id: number;
+  @Column()
+  name: string;
+  @Column()
+  formalCity: string;
+  @Column()
+  address: string;
+  @Column()
+  typeProcessingPersonalData: string;
+  @Column()
+  jobDescription: string;
+}
+
+@Entity()
+export class TpSupplier {
+  @PrimaryGeneratedColumn()
+  id: number;
+  @Column()
+  name: string;
+  @Column()
+  formalCity: string;
+  @Column()
+  address: string;
+  @Column()
+  descriptionOfSupply: string;
+  @Column()
+  linkToLegalTerms: string;
+}
+
+@Entity()
+export class TpDataTransfer {
+  @PrimaryGeneratedColumn()
+  id: number;
+  @Column()
+  legalCountry: string;
+  @Column()
+  nameOfExternalSubEmployee: string;
+  @Column()
+  reasonForDataTransfer: string;
+}
+
+@Entity()
+export class Thirdparty {
 
   @PrimaryGeneratedColumn()
   id: number;
+  @OneToOne(() => TpProcessing, {
+    cascade: true,
+    onDelete: 'CASCADE'
+  })
+  @JoinColumn()
+  TpProcessing: TpProcessing;
 
-  @Column()
-  nameOfExternalSubEmployeeExecutingDataProcessing: string;
-  @Column()
-  formalCityOfExternalSubEmployeeExecutingDataProcessing: string;
-  @Column()
-  addressOfExternalSubEmployeeExecutingDataProcessing: string;
-  @Column()
-  typeOfPersonalDataOfExternalSubEmployeeExecutingDataProcessing: string;
-  @Column()
-  jobDescriptionOfExternalSubEmployeeExecutingDataProcessing: string;
+  @OneToOne(() => TpProcessing, {
+    cascade: true,
+    onDelete: 'CASCADE'
+  })
+  @JoinColumn()
+  TpSupplier: TpSupplier;
 
-  @Column()
-  nameOfExternalSubEmployeeExecutingData: string;
-  @Column()
-  formalCityOfExternalSubEmployeeExecutingData: string;
-  @Column()
-  addressOfExternalSubEmployeeExecutingData: string;
-  @Column()
-  subscriptionOfSupplyOfExternalSubEmployeeExecutingData: string;
-  @Column()
-  linkToLegalTermsOfExternalSubEmployeeExecutingData: string;
-
-  @Column()
-  legelCountryOfDataTransfer: string;
-  @Column()
-  nameOfExternalSubEmployeeOfDataTransfer: string;
-  @Column()
-  reasonForDataTransferOfDataTransfer: string
+  @OneToOne(() => TpDataTransfer, {
+    cascade: true,
+    onDelete: 'CASCADE'
+  })
+  @JoinColumn()
+  TpDataTransfer: TpDataTransfer;
 
 }
 
@@ -117,17 +151,42 @@ export class Contract {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @OneToOne(() => companyResponsibleForDataProcessing, {
-    cascade: true
+  @OneToOne(() => CompanyResponsibleForDataProcessing, {
+    cascade: true,
+    onDelete: 'CASCADE'
   })
   @JoinColumn()
-  companyResponsibleForDP: companyResponsibleForDataProcessing;
+  companyResponsibleForDP: CompanyResponsibleForDataProcessing;
 
-  @OneToOne(() => companyExecutingDataProcessing, {
-    cascade: true
+  @OneToOne(() => CompanyExecutingDataProcessing, {
+    cascade: true,
+    onDelete: 'CASCADE'
   })
   @JoinColumn()
-  companyExecutingDP: companyExecutingDataProcessing;
+  companyExecutingDP: CompanyExecutingDataProcessing;
+
+  @OneToOne(() => Contractsignees, {
+    cascade: true,
+    onDelete: 'CASCADE'
+  })
+  @JoinColumn()
+  contractSignees: Contractsignees;
+
+  @OneToOne(() => Thirdparty, {
+    cascade: true,
+    onDelete: 'CASCADE'
+  })
+  @JoinColumn()
+  thirdParty: Thirdparty;
+
+  @Column()
+  dateSigned: string;
+
+  @Column()
+  citySigned: string;
+
+  @Column()
+  processingPurposes: string;
 
   @ManyToOne(() => Company, (company) => company.contracts)
   company: Company;

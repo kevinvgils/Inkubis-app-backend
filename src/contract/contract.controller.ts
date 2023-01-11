@@ -20,9 +20,7 @@ export class ContractController {
 
   @Post()
   create(@InjectToken() token, @Body() createContractDto: CreateContractDto): Promise<any> {
-    //console.log(token.id);
-    console.log(createContractDto);
-    
+    //console.log(token.id);    
     return this.contractService.create(createContractDto);
   }
 

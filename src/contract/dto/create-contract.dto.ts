@@ -28,8 +28,26 @@ export class CreateContractDto {
           citySigned: string;
         };
         public contractsignees: {
-          companyResponsibleForDataProcessing: { member1: string; member2: string; };
-          companyExecutingDataProcessing: { member1: string; member2: string; };
+          companyResponsibleForDataProcessing: { 
+            member1: {
+              nameEmployee1ResponsibleForDP: string,
+              jobEmployee1ResponsibleForDP: string,
+            }; 
+            member2: {
+              nameEmployee2ResponsibleForDP: string,
+              jobEmployee2ResponsibleForDP: string,
+            }; 
+          };
+          companyExecutingDataProcessing: { 
+            member1: {
+              nameEmployee1ExecutingDP: string,
+              jobEmployee1ExecutingDP: string,
+            }; 
+            member2: {
+              nameEmployee2ExecutingDP: string,
+              jobEmployee2ExecutingDP: string,
+            }; 
+           };
         };
         public processingpurposes: { processingPurposes: string; };
         public certification: { certifications: string; achievedCertifications: string; overhauls: string; };
@@ -38,7 +56,7 @@ export class CreateContractDto {
             name: string;
             formalCity: string;
             address: string;
-            typeOfProcessingForPersonalData: string;
+            typeProcessingPersonalData: string;
             jobDescription: string;
           };
           externalSubEmployeeExecutingDatathirdPartySuppliersProcessing: {

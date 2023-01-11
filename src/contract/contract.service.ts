@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateContractDto } from './dto/create-contract.dto';
 import { UpdateContractDto } from './dto/update-contract.dto';
 import { In, Repository } from 'typeorm';
-import { companyExecutingDataProcessing, companyResponsibleForDataProcessing, Contract, contractsignees, thirdparty } from './entities/contract.entity';
+import { CompanyExecutingDataProcessing, CompanyResponsibleForDataProcessing, Contract, Contractsignees, Thirdparty, TpDataTransfer, TpProcessing, TpSupplier } from './entities/contract.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Company } from 'src/company/entities/company.entity';
 import { CompanyService } from 'src/company/company.service';
@@ -18,32 +18,62 @@ export class ContractService {
   ) {}
 
   async create(createContractDto: CreateContractDto) {
-    let companyExecutingDP = new companyExecutingDataProcessing();
-    companyExecutingDP.address = createContractDto.contractinfo.companyExecutingDataProcessing.address
-    companyExecutingDP.city = createContractDto.contractinfo.companyExecutingDataProcessing.city
-    companyExecutingDP.companyNumber = createContractDto.contractinfo.companyExecutingDataProcessing.companyNumber
-    companyExecutingDP.countryOfResidence = createContractDto.contractinfo.companyExecutingDataProcessing.countryOfResidence
-    companyExecutingDP.legalCountry = createContractDto.contractinfo.companyExecutingDataProcessing.legalCountry
-    companyExecutingDP.name = createContractDto.contractinfo.companyExecutingDataProcessing.name
-    companyExecutingDP.zipcode = createContractDto.contractinfo.companyExecutingDataProcessing.zipcode
+    let companyExecutingDP = new CompanyExecutingDataProcessing();
+    companyExecutingDP = {
+      id: companyExecutingDP.id,
+      ...createContractDto.contractinfo.companyExecutingDataProcessing
+    }
 
-    let companyResponsibleForDP = new companyResponsibleForDataProcessing();
-    companyResponsibleForDP.address = createContractDto.contractinfo.companyResponsibleForDataProcessing.address
-    companyResponsibleForDP.city = createContractDto.contractinfo.companyResponsibleForDataProcessing.city
-    companyResponsibleForDP.companyNumber = createContractDto.contractinfo.companyResponsibleForDataProcessing.companyNumber
-    companyResponsibleForDP.countryOfResidence = createContractDto.contractinfo.companyResponsibleForDataProcessing.countryOfResidence
-    companyResponsibleForDP.legalCountry = createContractDto.contractinfo.companyResponsibleForDataProcessing.legalCountry
-    companyResponsibleForDP.name = createContractDto.contractinfo.companyResponsibleForDataProcessing.name
-    companyResponsibleForDP.zipcode = createContractDto.contractinfo.companyResponsibleForDataProcessing.zipcode
+    let companyResponsibleForDP = new CompanyResponsibleForDataProcessing();
+    companyResponsibleForDP = {
+      id: companyResponsibleForDP.id,
+      ...createContractDto.contractinfo.companyResponsibleForDataProcessing
+    }
+
+    let contractsignees = new Contractsignees()
+    contractsignees = {
+      id: companyResponsibleForDP.id,
+      ...createContractDto.contractsignees.companyExecutingDataProcessing.member1,
+      ...createContractDto.contractsignees.companyExecutingDataProcessing.member2,
+      ...createContractDto.contractsignees.companyResponsibleForDataProcessing.member1,
+      ...createContractDto.contractsignees.companyResponsibleForDataProcessing.member2
+    }
+
+    let thirdParty = new Thirdparty();
+    thirdParty.TpDataTransfer = new TpDataTransfer();
+    thirdParty.TpProcessing = new TpProcessing;
+    thirdParty.TpSupplier = new TpSupplier();
+
+    thirdParty.TpDataTransfer = {
+      id: thirdParty.TpDataTransfer.id,
+      ...createContractDto.thirdparty.dataTransfer
+    }
+
+    thirdParty.TpProcessing = {
+      id: thirdParty.TpProcessing.id,
+      ...createContractDto.thirdparty.externalSubEmployeeExecutingDataProcessing
+    }
+
+    thirdParty.TpSupplier = {
+      id: thirdParty.TpSupplier.id,
+      ...createContractDto.thirdparty.externalSubEmployeeExecutingDatathirdPartySuppliersProcessing
+    }
+
+    // console.log(createContractDto)
 
     //GET COMPANY
     const company = await this.companyService.findOne(createContractDto.company)
     const newContract = new Contract();
     newContract.companyExecutingDP = companyExecutingDP;
     newContract.companyResponsibleForDP = companyResponsibleForDP;
-    newContract.company = company
+    newContract.contractSignees = contractsignees;
+    newContract.thirdParty = thirdParty;
+    newContract.company = company;
+
+    console.log(newContract)
     
-    return await this.contractRepository.save(newContract);
+    return 'Test'
+    // return await this.contractRepository.save(newContract);
   }
 
   async findAll() {
