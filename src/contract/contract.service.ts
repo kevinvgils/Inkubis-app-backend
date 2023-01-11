@@ -103,10 +103,7 @@ export class ContractService {
     newContract.processingPurposes = createContractDto.contractinfo.processingPurposes;
     newContract.categories = categories;
 
-    console.log(newContract)
-    
-    return 'Test'
-    // return await this.contractRepository.save(newContract);
+    return await this.contractRepository.save(newContract);
   }
 
   async findAll() {
