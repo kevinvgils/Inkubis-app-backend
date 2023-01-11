@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateContractDto } from './dto/create-contract.dto';
 import { UpdateContractDto } from './dto/update-contract.dto';
 import { In, Repository } from 'typeorm';
-import { Certification, CompanyExecutingDataProcessing, CompanyResponsibleForDataProcessing, Contract, Contractsignees, Spoc, Thirdparty, TpDataTransfer, TpProcessing, TpSupplier } from './entities/contract.entity';
+import { Categories, Certification, CompanyExecutingDataProcessing, CompanyResponsibleForDataProcessing, Contract, Contractsignees, DataCategory, DataSubjectCategory, SpecialDataCategory, Spoc, Thirdparty, TpDataTransfer, TpProcessing, TpSupplier } from './entities/contract.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Company } from 'src/company/entities/company.entity';
 import { CompanyService } from 'src/company/company.service';
@@ -69,7 +69,24 @@ export class ContractService {
       ...createContractDto.certification
     }
 
-    console.log(createContractDto)
+    let categories = new Categories();
+    categories.dataCategory = new DataCategory();
+    categories.dataSubjectCategory = new DataSubjectCategory();
+    categories.specialDataCategory = new SpecialDataCategory();
+    categories.dataCategory = {
+      id: categories.dataCategory.id,
+      ...createContractDto.category.dataCategory
+    }
+    categories.dataSubjectCategory = {
+      id: categories.dataSubjectCategory.id,
+      ...createContractDto.category.dataSubjectCategory
+    }
+    categories.specialDataCategory = {
+      id: categories.specialDataCategory.id,
+      ...createContractDto.category.specialDataCategory
+    }
+
+    // console.log(createContractDto)
 
     //GET COMPANY
     const company = await this.companyService.findOne(createContractDto.company)
@@ -84,8 +101,9 @@ export class ContractService {
     newContract.citySigned = createContractDto.contractinfo.citySigned;
     newContract.dateSigned = createContractDto.contractinfo.dateSigned;
     newContract.processingPurposes = createContractDto.contractinfo.processingPurposes;
+    newContract.categories = categories;
 
-    // console.log(newContract)
+    console.log(newContract)
     
     return 'Test'
     // return await this.contractRepository.save(newContract);

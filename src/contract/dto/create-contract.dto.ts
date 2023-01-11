@@ -72,6 +72,40 @@ export class CreateContractDto {
             reasonForDataTransfer: string;
           }
         };
+        public category: {
+          dataSubjectCategory: {
+            potentialOrFormerCustomers: false,
+            applicantsAndFormerEmployeesInterns: false,
+            potentialIndependentAdvisors: false,
+            potentialFormerSuppliers: false,
+            potentialBusinessPartners: false,
+            minors: false,
+            otherCategory: false
+          },
+          dataCategory: {
+            identificationData: false,
+            nationalRegistryNumber: false,
+            communicationsData: false,
+            relationalData: false,
+            professionalData: false,
+            locationData: false,
+            financialData: false,
+            financialAndInsuranceProducts: false,
+            stigmatizationOrIsolationData: false,
+            lifestyleAndHabits: false,
+            loginData: false,
+            identityFraudData: false,
+            specialLegalDutyOfConfidentialityAndProfessionalSecrecyData: false,
+            contractualData: false,
+            imageOrSoundRecording: false,
+            otherCategory: false
+          },
+          specialDataCategory: {
+            racialOrEthnicData: false,
+            geneticData: false,
+            trafficRecordsAndPersonalData: false
+          }
+        };
         public spoc: {
           CompanyResponsibleForDataProcessing: { nameR: string; jobDescR: string; emailR: string; phoneR: string; mobileR: string; },
           CompanyExecutingDataProcessing: { nameE: string; jobDescE: string; emailE: string; phoneE: string; mobileE: string; }

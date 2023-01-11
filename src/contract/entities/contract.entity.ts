@@ -188,6 +188,102 @@ export class Spoc {
 }
 
 @Entity()
+export class DataSubjectCategory {
+  @PrimaryGeneratedColumn()
+  id: number;
+  @Column()
+  potentialOrFormerCustomers: boolean;
+  @Column()
+  applicantsAndFormerEmployeesInterns: boolean;
+  @Column()
+  potentialIndependentAdvisors: boolean;
+  @Column()
+  potentialFormerSuppliers: boolean;
+  @Column()
+  potentialBusinessPartners: boolean;
+  @Column()
+  minors: boolean;
+  @Column()
+  otherCategory: boolean;
+}
+
+@Entity()
+export class DataCategory {
+  @PrimaryGeneratedColumn()
+  id: number;
+  @Column()
+  identificationData: boolean;
+  @Column()
+  nationalRegistryNumber: boolean;
+  @Column()
+  communicationsData: boolean;
+  @Column()
+  relationalData: boolean;
+  @Column()
+  professionalData: boolean;
+  @Column()
+  locationData: boolean;
+  @Column()
+  financialData: boolean;
+  @Column()
+  financialAndInsuranceProducts: boolean;
+  @Column()
+  stigmatizationOrIsolationData: boolean;
+  @Column()
+  lifestyleAndHabits: boolean;
+  @Column()
+  loginData: boolean;
+  @Column()
+  identityFraudData: boolean;
+  @Column()
+  specialLegalDutyOfConfidentialityAndProfessionalSecrecyData: boolean;
+  @Column()
+  contractualData: boolean;
+  @Column()
+  imageOrSoundRecording: boolean;
+  @Column()
+  otherCategory: boolean;
+}
+
+@Entity()
+export class SpecialDataCategory {
+  @PrimaryGeneratedColumn()
+  id: number;
+  @Column()
+  racialOrEthnicData: boolean;
+  @Column()
+  geneticData: boolean;
+  @Column()
+  trafficRecordsAndPersonalData: boolean;
+}
+
+@Entity()
+export class Categories {
+  @PrimaryGeneratedColumn()
+  id: number;
+  @OneToOne(() => DataSubjectCategory, {
+    cascade: true,
+    onDelete: 'CASCADE'
+  })
+  @JoinColumn()
+  dataSubjectCategory: DataSubjectCategory;
+  
+  @OneToOne(() => DataCategory, {
+    cascade: true,
+    onDelete: 'CASCADE'
+  })
+  @JoinColumn()
+  dataCategory: DataCategory;
+
+  @OneToOne(() => SpecialDataCategory, {
+    cascade: true,
+    onDelete: 'CASCADE'
+  })
+  @JoinColumn()
+  specialDataCategory: SpecialDataCategory;
+}
+
+@Entity()
 export class Contract {
   @PrimaryGeneratedColumn()
   id: number;
@@ -234,6 +330,13 @@ export class Contract {
   })
   @JoinColumn()
   spoc: Spoc;
+
+  @OneToOne(() => Categories, {
+    cascade: true,
+    onDelete: 'CASCADE'
+  })
+  @JoinColumn()
+  categories: Categories;
 
   @Column()
   dateSigned: string;
