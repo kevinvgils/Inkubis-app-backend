@@ -109,9 +109,14 @@ export class ContractService {
   async findAll() {
     return await this.contractRepository.find({
       relations: {
-        company: true,
         companyExecutingDP: true,
-        companyResponsibleForDP: true
+        companyResponsibleForDP: true,
+        contractSignees: true,
+        thirdParty: true,
+        certifications: true,
+        spoc: true,
+        company: true,
+        categories: true
       },
     });
   }
@@ -125,10 +130,15 @@ export class ContractService {
     return await this.contractRepository.find({
       where: { company: In(usersCompanies)},
       relations: {
-        company: true,
         companyExecutingDP: true,
-        companyResponsibleForDP: true
-      }
+        companyResponsibleForDP: true,
+        contractSignees: true,
+        thirdParty: true,
+        certifications: true,
+        spoc: true,
+        company: true,
+        categories: true
+      },
     });
   }
 
@@ -136,9 +146,14 @@ export class ContractService {
     return await this.contractRepository.findOne({
       where: { id: id },
       relations: {
-        company: true,
         companyExecutingDP: true,
-        companyResponsibleForDP: true
+        companyResponsibleForDP: true,
+        contractSignees: true,
+        thirdParty: true,
+        certifications: true,
+        spoc: true,
+        company: true,
+        categories: true
       },
     });
   }
