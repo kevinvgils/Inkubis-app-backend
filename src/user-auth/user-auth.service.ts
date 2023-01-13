@@ -4,7 +4,7 @@ import {
   InjectEntityManager,
   InjectRepository,
 } from '@nestjs/typeorm';
-import { DataSource, EntityManager, Repository } from 'typeorm';
+import { DataSource, EntityManager, In, Repository } from 'typeorm';
 import { CreateUserAuthDto } from './dto/create-user-auth.dto';
 import { UpdateUserAuthDto } from './dto/update-user-auth.dto';
 import { UserAuth } from './entities/user-auth.entity';
@@ -13,10 +13,13 @@ import { JwtPayload, verify, sign, Secret } from 'jsonwebtoken';
 import { User, UserRole } from 'src/user/entities/user.entity';
 import { HttpException } from '@nestjs/common/exceptions';
 import { HttpStatus } from '@nestjs/common/enums';
+import { Company } from 'src/company/entities/company.entity';
 
 @Injectable()
 export class UserAuthService {
   constructor(
+    @InjectRepository(Company)
+    private companyRepository: Repository<Company>,
     @InjectRepository(UserAuth, 'authConnection')
     private authRepository: Repository<UserAuth>,
     @InjectRepository(User)
@@ -24,7 +27,7 @@ export class UserAuthService {
   ) {}
 
   async register(createUserAuthDto: CreateUserAuthDto, token: string) {
-    await this.checkIsAdmin(token['role'])
+    await this.checkIsAdmin(token['role']);
 
     if (
       !createUserAuthDto.emailAddress ||
@@ -40,17 +43,31 @@ export class UserAuthService {
       }
     }
 
+    const companiesToAdd = await this.companyRepository.find({
+      where: {
+        id: In(createUserAuthDto.companies),
+      },
+    });
+
+    console.log('------------------------');
+    console.log(createUserAuthDto);
+    console.log('------------------------');
+    console.log(companiesToAdd);
+    console.log('------------------------');
+
     const hashedPw = await hash(createUserAuthDto.password, 10);
     await this.authRepository.insert({
       emailAddress: createUserAuthDto.emailAddress,
       password: hashedPw,
     });
-    await this.userRepository.insert({
-      emailAddress: createUserAuthDto.emailAddress,
-      firstName: createUserAuthDto.firstName,
-      lastName: createUserAuthDto.lastName,
-      role: createUserAuthDto.role,
-    });
+    const user = new User();
+    user.companies = companiesToAdd;
+    user.emailAddress = createUserAuthDto.emailAddress;
+    user.firstName = createUserAuthDto.firstName;
+    user.lastName = createUserAuthDto.lastName;
+    user.role = createUserAuthDto.role;
+
+    await this.userRepository.save(user);
     return 'New user added';
   }
 
@@ -73,7 +90,10 @@ export class UserAuthService {
 
     return new Promise((resolve, reject) => {
       try {
-        const token = sign({ email, id: user?.id, role: user?.role }, 'secretstring');
+        const token = sign(
+          { email, id: user?.id, role: user?.role },
+          'secretstring',
+        );
         resolve(token);
       } catch (e) {
         reject(e);
@@ -92,8 +112,11 @@ export class UserAuthService {
   }
 
   async checkIsAdmin(userRole: string): Promise<boolean> {
-    if(userRole !== 'admin') {
-      throw new HttpException(`You must have the role 'admin' to perform this action`, HttpStatus.UNAUTHORIZED)
+    if (userRole !== 'admin') {
+      throw new HttpException(
+        `You must have the role 'admin' to perform this action`,
+        HttpStatus.UNAUTHORIZED,
+      );
     } else {
       return true;
     }

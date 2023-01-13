@@ -6,4 +6,5 @@ export class CreateUserAuthDto {
   emailAddress = '';
   password = '';
   role: UserRole;
+  companies: number[] = [];
 }
