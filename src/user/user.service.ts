@@ -2,7 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { HttpStatus } from '@nestjs/common/enums';
 import { HttpException } from '@nestjs/common/exceptions';
 import { InjectRepository } from '@nestjs/typeorm';
+import { hash } from 'bcrypt';
 import { Company } from 'src/company/entities/company.entity';
+import { UserAuth } from 'src/user-auth/entities/user-auth.entity';
 import { In, Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -12,6 +14,8 @@ import { User } from './entities/user.entity';
 export class UserService {
   constructor(
     @InjectRepository(Company) private companyRepository: Repository<Company>,
+    @InjectRepository(UserAuth, 'authConnection')
+    private authRepository: Repository<UserAuth>,
     @InjectRepository(User) private userRepository: Repository<User>,
   ) {}
 
@@ -22,20 +26,20 @@ export class UserService {
   async findAll() {
     return await this.userRepository.find({
       relations: {
-        companies: true
-      }
+        companies: true,
+      },
     });
   }
 
   async findOne(id: number) {
-    console.log(id)
+    console.log(id);
     return await this.userRepository.findOne({
       relations: {
-        companies: true
+        companies: true,
       },
       where: {
-        id: id
-      }
+        id: id,
+      },
     });
   }
 
@@ -54,6 +58,11 @@ export class UserService {
     });
 
     const user = await this.userRepository.findOne({ where: { id: id } });
+    const authUser = await this.authRepository.findOne({
+      where: { emailAddress: user.emailAddress },
+    });
+    authUser.emailAddress = updateUserDto.emailAddress;
+    await this.authRepository.save(authUser);
 
     user.firstName = updateUserDto.firstName;
     user.lastName = updateUserDto.lastName;
