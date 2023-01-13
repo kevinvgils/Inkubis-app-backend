@@ -130,7 +130,7 @@ export class Thirdparty {
   @JoinColumn()
   TpProcessing: TpProcessing;
 
-  @OneToOne(() => TpProcessing, {
+  @OneToOne(() => TpSupplier, {
     cascade: true,
     onDelete: 'CASCADE'
   })

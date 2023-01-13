@@ -41,7 +41,7 @@ export class ContractService {
 
     let thirdParty = new Thirdparty();
     thirdParty.TpDataTransfer = new TpDataTransfer();
-    thirdParty.TpProcessing = new TpProcessing;
+    thirdParty.TpProcessing = new TpProcessing();
     thirdParty.TpSupplier = new TpSupplier();
     thirdParty.TpDataTransfer = {
       id: thirdParty.TpDataTransfer.id,
@@ -145,16 +145,22 @@ export class ContractService {
   async findOne(id: number) {
     return await this.contractRepository.findOne({
       where: { id: id },
-      relations: {
-        companyExecutingDP: true,
-        companyResponsibleForDP: true,
-        contractSignees: true,
-        thirdParty: true,
-        certifications: true,
-        spoc: true,
-        company: true,
-        categories: true
-      },
+      relations: [
+        'companyExecutingDP',
+        'companyResponsibleForDP',
+        'contractSignees',
+        'thirdParty',
+        'thirdParty.TpProcessing',
+        'thirdParty.TpSupplier',
+        'thirdParty.TpDataTransfer',
+        'certifications',
+        'spoc',
+        'company',
+        'categories',
+        'categories.dataSubjectCategory',
+        'categories.dataCategory',
+        'categories.specialDataCategory',
+      ],
     });
   }
 
