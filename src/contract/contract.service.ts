@@ -107,7 +107,13 @@ export class ContractService {
   }
 
   async findAll() {
-    return await this.contractRepository.find();
+    return await this.contractRepository.find({
+      relations: {
+        company: true,
+        companyExecutingDP: true,
+        companyResponsibleForDP: true
+      },
+    });
   }
 
   async findAllForUser(userId: number) {
@@ -131,6 +137,8 @@ export class ContractService {
       where: { id: id },
       relations: {
         company: true,
+        companyExecutingDP: true,
+        companyResponsibleForDP: true
       },
     });
   }
