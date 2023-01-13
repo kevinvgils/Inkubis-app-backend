@@ -49,12 +49,6 @@ export class UserAuthService {
       },
     });
 
-    console.log('------------------------');
-    console.log(createUserAuthDto);
-    console.log('------------------------');
-    console.log(companiesToAdd);
-    console.log('------------------------');
-
     const hashedPw = await hash(createUserAuthDto.password, 10);
     await this.authRepository.insert({
       emailAddress: createUserAuthDto.emailAddress,
