@@ -1,13 +1,13 @@
 import {
   Controller,
-  Get,
   Post,
   Body,
-  Patch,
-  Param,
-  Delete,
   Res,
   HttpStatus,
+  Get,
+  Param,
+  Put,
+  Delete,
 } from '@nestjs/common';
 import { CompanyService } from './company.service';
 import { CreateCompanyDto } from './dto/create-company.dto';
@@ -48,17 +48,46 @@ export class CompanyController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.companyService.findOne(+id);
+  async findOne(@Param('id') id: number, @Res() response) {
+    try {
+      const company = await this.companyService.findOne(id);
+      return response
+        .status(HttpStatus.OK)
+        .json({ message: 'Company found successfully!', company });
+    } catch (err) {
+      return response.status(err.response).json(err.message);
+    }
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCompanyDto: UpdateCompanyDto) {
-    return this.companyService.update(id, updateCompanyDto);
+  @Put(':id')
+  async update(
+    @Param('id') id: number,
+    @Body() updateCompanyDto: UpdateCompanyDto,
+    @Res() response,
+  ) {
+    try {
+      const company = await this.companyService.update(id, updateCompanyDto);
+      return response
+        .status(HttpStatus.OK)
+        .json({ message: 'Updated company successfully!' });
+    } catch (err) {
+      return response.status(HttpStatus.BAD_REQUEST).json({
+        statusCode: 400,
+        message: 'Error: Company not updated!',
+        error: 'Bad Request',
+      });
+    }
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.companyService.remove(id);
+  async remove(@Param('id') id: number, @Res() response) {
+    try {
+      const company = await this.companyService.remove(id);
+      return response
+        .status(HttpStatus.OK)
+        .json({ message: 'Deleted company successfully!' });
+    } catch (err) {
+      return response.status(err.response).json(err.message);
+    }
   }
 }

@@ -1,5 +1,4 @@
-import { Injectable } from '@nestjs/common';
-import { NotFoundException } from '@nestjs/common/exceptions';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Company } from './entities/company.entity';
@@ -35,7 +34,7 @@ export class CompanyService {
     return company;
   }
 
-  async update(id: string, data: any): Promise<any> {
+  async update(id: number, data: any): Promise<any> {
     return await this.companyRepository
       .createQueryBuilder()
       .update()
@@ -44,7 +43,7 @@ export class CompanyService {
       .execute();
   }
 
-  async remove(id: string): Promise<any> {
+  async remove(id: number): Promise<any> {
     return await this.companyRepository
       .createQueryBuilder()
       .delete()
