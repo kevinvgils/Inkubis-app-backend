@@ -5,7 +5,7 @@ import { Entity, Column, PrimaryGeneratedColumn, JoinColumn, OneToOne, ManyToOne
 @Entity()
 export class Contract {
   @PrimaryGeneratedColumn()
-  id: number;
+  id: string;
 
   @Column()
   option1: boolean;

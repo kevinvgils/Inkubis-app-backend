@@ -1,17 +1,9 @@
-import {
-  Controller,
-  Post,
-  Body,
-  Res,
-  HttpStatus,
-  Get,
-  Param,
-  Put,
-  Delete,
-} from '@nestjs/common';
-import { CompanyService } from './company.service';
-import { CreateCompanyDto } from './dto/create-company.dto';
-import { UpdateCompanyDto } from './dto/update-company.dto';
+/* eslint-disable prettier/prettier */
+import { Controller, Post, Body, Res, HttpStatus, Get, Param, Put, Delete } from "@nestjs/common";
+import { CompanyService } from "./company.service";
+import { CreateCompanyDto } from "./dto/create-company.dto";
+import { UpdateCompanyDto } from "./dto/update-company.dto";
+
 
 @Controller('company')
 export class CompanyController {
@@ -71,6 +63,7 @@ export class CompanyController {
         .status(HttpStatus.OK)
         .json({ message: 'Updated company successfully!' });
     } catch (err) {
+      console.log(err)
       return response.status(HttpStatus.BAD_REQUEST).json({
         statusCode: 400,
         message: 'Error: Company not updated!',
