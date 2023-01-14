@@ -40,14 +40,14 @@ export class Company {
   @Column()
   city: string;
 
-  @Matches(new RegExp(/[0-9]{3} [0-9 ]{3} [0-9]{3}/g), {
+  @Matches(new RegExp('[0-9 ]{3} [0-9 ]{3} [0-9]{3}'), {
     message: 'Kvknumber should contain the following pattern: (123 456 789)',
   })
   @Column()
   kvkNumber: string;
 
-  @Column()
-  imageURL: string;
+  @Column('text')
+  imageBase64Code: string;
 
   @OneToMany(() => Contract, (contract) => contract.company)
   contracts: Contract[];

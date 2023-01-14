@@ -34,12 +34,10 @@ export class CompanyService {
     return company;
   }
 
-  async update(id: number, data: any): Promise<any> {
+  async update(id: string, data: any): Promise<any> {
     return await this.companyRepository
       .createQueryBuilder()
-      .update()
-      .set(data)
-      .where('id = :id', { id })
+      .update(data)
       .execute();
   }
 
