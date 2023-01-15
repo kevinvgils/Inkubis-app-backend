@@ -1,9 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Contract } from 'src/contract/entities/contract.entity';
 import { Repository } from 'typeorm';
-import { CreateCompanyDto } from './dto/create-company.dto';
-import { UpdateCompanyDto } from './dto/update-company.dto';
 import { Company } from './entities/company.entity';
 
 @Injectable()
@@ -12,34 +9,44 @@ export class CompanyService {
     @InjectRepository(Company) private companyRepository: Repository<Company>,
   ) {}
 
-  async create(companyName: string) {
-    return await this.companyRepository.insert({
-      name: companyName,
-    });
+  async create(company: any): Promise<any> {
+    return await this.companyRepository.save(
+      this.companyRepository.create(company),
+    );
   }
 
-  async findAll() {
-    return await this.companyRepository.find();
-  }
+  async findAll(): Promise<Company[]> {
+    const companies = await this.companyRepository.find();
 
-  /*async getAllData(data: customer_data): Promise<customer_data[]> {
-    return await this.pdfRepository.find();
-}*/
+    if (!companies || companies.length == 0) {
+      throw new NotFoundException(`Companies Data Not Found`);
+    }
+    return companies;
+  }
 
   async findOne(id: number) {
-    return await this.companyRepository.findOne({
-      where: { id: id },
-      relations: {
-        contracts: true,
-      },
-    });
+    const company = await this.companyRepository.findOneBy({ id });
+
+    if (!company) {
+      throw new NotFoundException(`Company #${id} not found`);
+    }
+
+    return company;
   }
 
-  async update(companyId: number, updateCompanyDto: UpdateCompanyDto) {
-    return await this.companyRepository.update(companyId, updateCompanyDto);
+  async update(id: string, data: any): Promise<any> {
+    return await this.companyRepository
+      .createQueryBuilder()
+      .update(data)
+      .execute();
   }
 
-  async remove(id: number) {
-    return await this.companyRepository.delete(id);
+  async remove(id: number): Promise<any> {
+    return await this.companyRepository
+      .createQueryBuilder()
+      .delete()
+      .from(Company)
+      .where('id = :id', { id })
+      .execute();
   }
 }

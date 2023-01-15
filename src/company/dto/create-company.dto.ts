@@ -1,4 +1,3 @@
-export class CreateCompanyDto {
-    id: number;
-    name: string;
-}
+import { Company } from '../entities/company.entity';
+
+export class CreateCompanyDto extends Company {}
