@@ -35,10 +35,7 @@ export class CompanyService {
   }
 
   async update(id: string, data: any): Promise<any> {
-    return await this.companyRepository
-      .createQueryBuilder()
-      .update(data)
-      .execute();
+    return await this.companyRepository.update(+id, data);
   }
 
   async remove(id: number): Promise<any> {
