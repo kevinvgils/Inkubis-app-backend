@@ -3,7 +3,6 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
   Delete,
 } from '@nestjs/common';
@@ -27,7 +26,7 @@ export class UserController {
     return this.userService.findAll();
   }
 
-  @Get(":id")
+  @Get(':id')
   findOne(@Param('id') id: number) {
     return this.userService.findOne(id);
   }

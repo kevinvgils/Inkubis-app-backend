@@ -1,6 +1,6 @@
 import { MinLength, MaxLength, Matches } from 'class-validator';
-import { Contract } from 'src/contract/entities/contract.entity';
-import { User } from 'src/user/entities/user.entity';
+import { Contract } from '../../contract/entities/contract.entity';
+import { User } from '../../user/entities/user.entity';
 import {
   Entity,
   Index,

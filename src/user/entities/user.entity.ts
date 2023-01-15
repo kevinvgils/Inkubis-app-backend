@@ -3,7 +3,6 @@ import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
-  Unique,
   ManyToMany,
   JoinTable,
 } from 'typeorm';
@@ -16,7 +15,7 @@ export enum UserRole {
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
-  id: number;
+  id: string;
 
   @Column({ unique: true })
   emailAddress: string;
