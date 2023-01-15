@@ -1,11 +1,13 @@
 import { MinLength, MaxLength, Matches, isDefined } from 'class-validator';
 import { Contract } from 'src/contract/entities/contract.entity';
+import { User } from 'src/user/entities/user.entity';
 import {
   Entity,
   Index,
   PrimaryGeneratedColumn,
   Column,
   OneToMany,
+  ManyToMany,
 } from 'typeorm';
 
 @Entity()
@@ -51,4 +53,7 @@ export class Company {
 
   @OneToMany(() => Contract, (contract) => contract.company)
   contracts: Contract[];
+
+  @ManyToMany(() => User, (users: User) => users.companies)
+  users: User[];
 }
