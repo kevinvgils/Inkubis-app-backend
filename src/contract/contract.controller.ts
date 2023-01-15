@@ -3,9 +3,9 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
   Delete,
+  Put,
 } from '@nestjs/common';
 import { Company } from 'src/company/entities/company.entity';
 import { InjectToken } from 'src/user-auth/token.decorator';
@@ -40,11 +40,8 @@ export class ContractController {
     return this.contractService.findOne(+id);
   }
 
-  @Patch(':id')
-  update(
-    @Param('id') id: string,
-    @Body() updateContractDto: UpdateContractDto,
-  ) {
+  @Put(':id')
+  update(@Param('id') id: string, @Body() updateContractDto: UpdateContractDto) {
     return this.contractService.update(+id, updateContractDto);
   }
 

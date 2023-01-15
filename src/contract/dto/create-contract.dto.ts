@@ -50,7 +50,11 @@ export class CreateContractDto {
             }; 
            };
         };
-        public certification: { certifications: string; achievedCertifications: string; overhauls: string; };
+        public certifications: {
+          certifications:string;
+          achievedCertifications: string;
+          overhauls: string;
+        };
         public thirdparty: {
           externalSubEmployeeExecutingDataProcessing: {
             name: string;
@@ -107,8 +111,20 @@ export class CreateContractDto {
           }
         };
         public spoc: {
-          CompanyResponsibleForDataProcessing: { nameR: string; jobDescR: string; emailR: string; phoneR: string; mobileR: string; },
-          CompanyExecutingDataProcessing: { nameE: string; jobDescE: string; emailE: string; phoneE: string; mobileE: string; }
+          CompanyResponsibleForDataProcessing: {
+            nameR: string;
+            jobDescR: string;
+            emailR: string;
+            phoneR: string;
+            mobileR: string;
+          },
+          CompanyExecutingDataProcessing:
+          { nameE: string;
+            jobDescE: string;
+            emailE: string;
+            phoneE: string;
+            mobileE: string;
+          }
         };
         company: number;
 
