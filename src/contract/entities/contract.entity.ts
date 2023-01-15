@@ -286,7 +286,7 @@ export class Categories {
 @Entity()
 export class Contract {
   @PrimaryGeneratedColumn()
-  id: string;
+  id: number;
 
   @OneToOne(() => CompanyResponsibleForDataProcessing, {
     cascade: true,
