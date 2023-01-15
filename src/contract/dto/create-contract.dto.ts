@@ -28,7 +28,7 @@ export class CreateContractDto {
           citySigned: string;
           processingPurposes: string;
         };
-        public contractsignees: {
+        public contractSignees: {
           companyResponsibleForDataProcessing: { 
             member1: {
               nameEmployee1ResponsibleForDP: string,

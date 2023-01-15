@@ -33,10 +33,10 @@ export class ContractService {
     let contractsignees = new Contractsignees()
     contractsignees = {
       id: companyResponsibleForDP.id,
-      ...createContractDto.contractsignees.companyExecutingDataProcessing.member1,
-      ...createContractDto.contractsignees.companyExecutingDataProcessing.member2,
-      ...createContractDto.contractsignees.companyResponsibleForDataProcessing.member1,
-      ...createContractDto.contractsignees.companyResponsibleForDataProcessing.member2
+      ...createContractDto.contractSignees.companyExecutingDataProcessing.member1,
+      ...createContractDto.contractSignees.companyExecutingDataProcessing.member2,
+      ...createContractDto.contractSignees.companyResponsibleForDataProcessing.member1,
+      ...createContractDto.contractSignees.companyResponsibleForDataProcessing.member2
     }
 
     let thirdParty = new Thirdparty();
