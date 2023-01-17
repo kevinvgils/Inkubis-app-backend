@@ -22,6 +22,12 @@ export class CompanyService {
     return await this.companyRepository.find();
   }
 
+  async findAllForUser(userId: number) {
+    return await this.companyRepository.find({
+      where: { id: userId },
+    })
+  }
+
   /*async getAllData(data: customer_data): Promise<customer_data[]> {
     return await this.pdfRepository.find();
 }*/

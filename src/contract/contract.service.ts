@@ -89,7 +89,7 @@ export class ContractService {
     // console.log(createContractDto)
 
     //GET COMPANY
-    const company = await this.companyService.findOne(createContractDto.company)
+    const company = await this.companyService.findOne(createContractDto.companyId)
     const newContract = new Contract();
     newContract.companyExecutingDP = companyExecutingDP;
     newContract.companyResponsibleForDP = companyResponsibleForDP;
@@ -97,11 +97,12 @@ export class ContractService {
     newContract.thirdParty = thirdParty;
     newContract.certifications = certifications;
     newContract.spoc = spoc;
-    newContract.company = company;
+    //newContract.company = company;
     newContract.citySigned = createContractDto.contractinfo.citySigned;
     newContract.dateSigned = createContractDto.contractinfo.dateSigned;
     newContract.processingPurposes = createContractDto.contractinfo.processingPurposes;
     newContract.categories = categories;
+    newContract.company = company
 
     console.log(newContract);
 

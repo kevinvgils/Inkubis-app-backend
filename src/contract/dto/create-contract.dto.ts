@@ -126,7 +126,7 @@ export class CreateContractDto {
             mobileE: string;
           }
         };
-        company: number;
+        companyId: number;
 
       }
 
