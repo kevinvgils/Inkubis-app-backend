@@ -1,14 +1,18 @@
 import { Controller, Post, Body, Res, HttpStatus, Get, Param, Put, Delete } from "@nestjs/common";
+import { UseGuards } from "@nestjs/common/decorators";
+import { Roles } from "src/user-auth/role.decorator";
+import { RolesGuard } from "src/user-auth/role.guard";
 import { CompanyService } from "./company.service";
 import { CreateCompanyDto } from "./dto/create-company.dto";
 import { UpdateCompanyDto } from "./dto/update-company.dto";
 
-
+@UseGuards(RolesGuard)
 @Controller('company')
 export class CompanyController {
   constructor(private readonly companyService: CompanyService) {}
 
   @Post()
+  @Roles('admin')
   async create(@Body() createCompanyDto: CreateCompanyDto, @Res() response) {
     try {
       const newCompany = await this.companyService.create(createCompanyDto);
@@ -26,6 +30,7 @@ export class CompanyController {
   }
 
   @Get()
+  @Roles('admin')
   async findAll(@Res() response) {
     try {
       const companies = await this.companyService.findAll();
@@ -56,6 +61,7 @@ export class CompanyController {
   }
 
   @Put(':id')
+  @Roles('admin')
   async update(
     @Param('id') id: string,
     @Body() updateCompanyDto: UpdateCompanyDto,
