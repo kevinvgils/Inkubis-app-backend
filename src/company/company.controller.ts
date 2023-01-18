@@ -83,6 +83,7 @@ export class CompanyController {
   }
 
   @Delete(':id')
+  @Roles('admin')
   async remove(@Param('id') id: number, @Res() response) {
     try {
       const company = await this.companyService.remove(id);
