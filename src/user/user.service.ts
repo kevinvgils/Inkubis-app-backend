@@ -32,7 +32,6 @@ export class UserService {
   }
 
   async findOne(id: number) {
-    console.log(id);
     return await this.userRepository.findOne({
       relations: {
         companies: true,
