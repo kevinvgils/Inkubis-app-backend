@@ -290,7 +290,8 @@ export class Contract {
 
   @OneToOne(() => CompanyResponsibleForDataProcessing, {
     cascade: true,
-    onDelete: 'CASCADE'
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
   })
   @JoinColumn()
   companyResponsibleForDP: CompanyResponsibleForDataProcessing;

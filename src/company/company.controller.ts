@@ -38,6 +38,11 @@ export class CompanyController {
     }
   }
 
+  @Get('usercompany/:id')
+  findUserCompany(@Param('id') id: string) {
+    return this.companyService.findAllForUser(+id)
+  }
+
   @Get(':id')
   async findOne(@Param('id') id: number, @Res() response) {
     try {

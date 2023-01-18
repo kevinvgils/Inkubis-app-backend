@@ -17,11 +17,16 @@ export class CompanyService {
 
   async findAll(): Promise<Company[]> {
     const companies = await this.companyRepository.find();
-
     if (!companies || companies.length == 0) {
       throw new NotFoundException(`Companies Data Not Found`);
     }
     return companies;
+  }
+
+  async findAllForUser(userId: number) {
+    return await this.companyRepository.find({
+      where: { id: userId },
+    })
   }
 
   async findOne(id: number) {
