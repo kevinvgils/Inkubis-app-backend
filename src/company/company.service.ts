@@ -1,12 +1,14 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { UserService } from 'src/user/user.service';
+import { In, Repository } from 'typeorm';
 import { Company } from './entities/company.entity';
 
 @Injectable()
 export class CompanyService {
   constructor(
     @InjectRepository(Company) private companyRepository: Repository<Company>,
+    private userService: UserService
   ) {}
 
   async create(company: any): Promise<any> {
@@ -24,8 +26,14 @@ export class CompanyService {
   }
 
   async findAllForUser(userId: number) {
+    let user = await this.userService.findOne(userId);
+    console.log(user)
+    let companyIds = [];
+    user.companies.forEach(company => {
+      companyIds.push(company.id)
+    });
     return await this.companyRepository.find({
-      where: { id: userId },
+      where: { id: In(companyIds) },
     })
   }
 
