@@ -13,6 +13,7 @@ import { Put, UseGuards } from '@nestjs/common/decorators';
 import { AddCompanyUserDto } from './dto/add-company-user.dto';
 import { RolesGuard } from 'src/user-auth/role.guard';
 import { Roles } from 'src/user-auth/role.decorator';
+import { InjectToken } from 'src/user-auth/token.decorator';
 
 @UseGuards(RolesGuard)
 @Controller('user')
@@ -36,7 +37,13 @@ export class UserController {
     return this.userService.findOne(id);
   }
 
+  @Put('self')
+  updateSelf(@InjectToken() token, @Body() updateUserDto: UpdateUserDto) {
+    return this.userService.updateSelf(token.id, updateUserDto);
+  }
+
   @Put(':id')
+  @Roles('admin')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.userService.update(+id, updateUserDto);
   }

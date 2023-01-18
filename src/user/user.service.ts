@@ -42,6 +42,27 @@ export class UserService {
     });
   }
 
+  async updateSelf(id: number, updateUserDto: UpdateUserDto) {
+    if (!id || !UpdateUserDto) {
+      throw new HttpException(
+        'Check if the request body is correct',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    const user = await this.userRepository.findOne({ where: { id: id } });
+    const authUser = await this.authRepository.findOne({
+      where: { emailAddress: user.emailAddress },
+    });
+    authUser.emailAddress = updateUserDto.emailAddress;
+    await this.authRepository.save(authUser);
+
+    user.firstName = updateUserDto.firstName;
+    user.lastName = updateUserDto.lastName;
+    user.emailAddress = updateUserDto.emailAddress;
+    return await this.userRepository.save(user);
+  }
+
   async update(id: number, updateUserDto: UpdateUserDto) {
     if (!id || !UpdateUserDto) {
       throw new HttpException(
