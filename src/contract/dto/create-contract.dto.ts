@@ -27,6 +27,7 @@ export class CreateContractDto {
           dateSigned: string;
           citySigned: string;
           processingPurposes: string;
+          companyId: number;
         };
         public contractSignees: {
           companyResponsibleForDataProcessing: { 
@@ -126,7 +127,6 @@ export class CreateContractDto {
             mobileE: string;
           }
         };
-        companyId: number;
 
       }
 

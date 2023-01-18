@@ -89,7 +89,7 @@ export class ContractService {
     // console.log(createContractDto)
 
     //GET COMPANY
-    const company = await this.companyService.findOne(createContractDto.companyId)
+    const company = await this.companyService.findOne(createContractDto.contractinfo.companyId)
     const newContract = new Contract();
     newContract.companyExecutingDP = companyExecutingDP;
     newContract.companyResponsibleForDP = companyResponsibleForDP;
@@ -103,9 +103,6 @@ export class ContractService {
     newContract.processingPurposes = createContractDto.contractinfo.processingPurposes;
     newContract.categories = categories;
     newContract.company = company
-
-    console.log(newContract);
-
     return await this.contractRepository.save(newContract);
   }
 
@@ -130,6 +127,7 @@ export class ContractService {
     user.companies.forEach(c => {
       usersCompanies.push(c.id)
     });
+    console.log(usersCompanies)
     return await this.contractRepository.find({
       where: { company: In(usersCompanies)},
       relations: {

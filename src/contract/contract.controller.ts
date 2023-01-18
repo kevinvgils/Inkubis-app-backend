@@ -23,8 +23,8 @@ export class ContractController {
   constructor(private readonly contractService: ContractService) {}
 
   @Post()
-  create(@InjectToken() token, @Body() createContractDto: CreateContractDto): Promise<any> {
-    return this.contractService.create(createContractDto);
+  async create(@InjectToken() token, @Body() createContractDto: CreateContractDto): Promise<any> {
+    return await this.contractService.create(createContractDto);
   }
 
   @Get()
