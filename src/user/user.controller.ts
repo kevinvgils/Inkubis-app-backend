@@ -9,19 +9,24 @@ import {
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { Put } from '@nestjs/common/decorators';
+import { Put, UseGuards } from '@nestjs/common/decorators';
 import { AddCompanyUserDto } from './dto/add-company-user.dto';
+import { RolesGuard } from 'src/user-auth/role.guard';
+import { Roles } from 'src/user-auth/role.decorator';
 
+@UseGuards(RolesGuard)
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post()
+  @Roles('admin')
   create(@Body() createUserDto: CreateUserDto) {
     return this.userService.create(createUserDto);
   }
 
   @Get()
+  @Roles('admin')
   findAll() {
     return this.userService.findAll();
   }
