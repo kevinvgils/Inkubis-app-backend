@@ -1,26 +1,62 @@
-import { Injectable } from '@nestjs/common';
-import { CreateCompanyDto } from './dto/create-company.dto';
-import { UpdateCompanyDto } from './dto/update-company.dto';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { UserService } from 'src/user/user.service';
+import { In, Repository } from 'typeorm';
+import { Company } from './entities/company.entity';
 
 @Injectable()
 export class CompanyService {
-  create(createCompanyDto: CreateCompanyDto) {
-    return 'This action adds a new company';
+  constructor(
+    @InjectRepository(Company) private companyRepository: Repository<Company>,
+    private userService: UserService
+  ) {}
+
+  async create(company: any): Promise<any> {
+    return await this.companyRepository.save(
+      this.companyRepository.create(company),
+    );
   }
 
-  findAll() {
-    return `This action returns all company`;
+  async findAll(): Promise<Company[]> {
+    const companies = await this.companyRepository.find();
+    if (!companies || companies.length == 0) {
+      throw new NotFoundException(`Companies Data Not Found`);
+    }
+    return companies;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} company`;
+  async findAllForUser(userId: number) {
+    let user = await this.userService.findOne(userId);
+    console.log(user)
+    let companyIds = [];
+    user.companies.forEach(company => {
+      companyIds.push(company.id)
+    });
+    return await this.companyRepository.find({
+      where: { id: In(companyIds) },
+    })
   }
 
-  update(id: number, updateCompanyDto: UpdateCompanyDto) {
-    return `This action updates a #${id} company`;
+  async findOne(id: number) {
+    const company = await this.companyRepository.findOne({ where: {id: id} });
+
+    if (!company) {
+      throw new NotFoundException(`Company #${id} not found`);
+    }
+
+    return company;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} company`;
+  async update(id: string, data: any): Promise<any> {
+    return await this.companyRepository.update(+id, data);
+  }
+
+  async remove(id: number): Promise<any> {
+    return await this.companyRepository
+      .createQueryBuilder()
+      .delete()
+      .from(Company)
+      .where('id = :id', { id })
+      .execute();
   }
 }
